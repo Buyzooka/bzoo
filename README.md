@@ -1,6 +1,6 @@
-# CPU Coin token
+# Buyzooka Token
 
-Smart contracts for the BuyzookaToken ecosystem token (see BuyzookaToken.io and mediarich.io). 
+Smart contracts for the BuyzookaToken ecosystem token (see buyzooka.io and join.buyzooka.io).
 
 Core to BuyzookaToken is an implementation of a fully-featured vesting token.
  
@@ -30,7 +30,7 @@ The project requires node.js. I'm using node v10.15.1. The node modules/versions
 
 You'll need a copy of the [openzeppelin-solidity](https://github.com/OpenZeppelin/openzeppelin-solidity.git) repository.
 
-Clone it to a folder called `openzeppelin-solidity` which is a sibling of `BuyzookaToken`.
+Clone it to a folder called `openzeppelin-solidity` which is a sibling of `BuyzookaToken` folder.
 
 ### Installing
 
@@ -65,12 +65,6 @@ Run the tests by issuing the command:
 npm test
 ```
 
-(or in a DOS command prompt):
-
-```
-test.bat
-```
-
 ### Breakdown into end-to-end tests
 
 There is a comprehensive set of tests written using Mocha that exercise functions of the smart contract that aren't already covered by openzeppelin-solidity, which has tests for the contracts implemented for this project. Web3 and ganache allow the tests to be run quickly using a local JS blockchain.
@@ -85,22 +79,8 @@ This section is yet to be written.
 
 * [openzeppelin-solidity](https://github.com/OpenZeppelin/openzeppelin-solidity.git) - a battle-tested framework of reusable smart contracts.
 
-## Contributing
+## Authors & contributors
 
-This section is yet to be written. 
-
-## Versioning
-
-This section is yet to be written. 
-
-## Authors
-
+* **Julien Gabriel** - *Buyzooka adaptation* - [the-juju](https://github.com/the-juju)
+* **Enock Mukolondjolo** - *Support on smart contract writing* - [EnockMuk](https://github.com/EnockMuk)
 * **David Jennings** - *Initial work* - [djenning90](https://github.com/djenning90)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-This section is yet to be written. 
