@@ -18,7 +18,8 @@ function getWalletProvider() {
     if (useProductionBlockchain)
         return new Web3(new HDWalletProvider(
             mnemonic,
-            'https://rinkeby.infura.io/v3/2694f180955f4061af2ea57208316964'
+            // 'https://polygon-mumbai.infura.io/v3/98015af30d754c9f9c8d9b98f7be0410'
+            'https://ropsten.infura.io/v3/98015af30d754c9f9c8d9b98f7be0410'
         ));
     else
         return ganache.provider();
@@ -33,7 +34,10 @@ async function deployContract(walletProvider, contractFullPath, doBuild, constru
 
     if (log) logger.log('==> Deploying contract \'' + contractPath + '\' and dependencies...');
 
-    walletProvider.setMaxListeners(15);       // Suppress MaxListenersExceededWarning warning
+    if (!useProductionBlockchain) {
+        walletProvider.setMaxListeners(15);       // Suppress MaxListenersExceededWarning warning
+    }
+
     const web3 = new Web3(walletProvider);
     this.gasPrice = await web3.eth.getGasPrice();
     this.accounts = await web3.eth.getAccounts();
@@ -47,15 +51,21 @@ async function deployContract(walletProvider, contractFullPath, doBuild, constru
 
     // Deploy the contract and send it gas to run.
     if (log) logger.log('Attempting to deploy from account:', this.accounts[0]);
+    if (log) logger.log('----- Account available amount:', await (web3.eth.getBalance(this.accounts[0])));
     try {
         this.contract = await new web3.eth.Contract(abi)
             .deploy({data: '0x' + bytecode, arguments: constructorArgs})
-            .send({from: this.accounts[0], gas: '6720000'});        /* This is AT the block limit and CANNOT be increased! */
+            .send({
+                from: this.accounts[0], 
+                gas: '6720000',
+                // gas: '6720000',
+            });        /* This is AT the block limit and CANNOT be increased! */
     } catch (err) {
         if (log) logger.log(colors.red('==> Deploy FAILED! (no deployment)\n'));
+        if (log) logger.log(colors.red(err + '\n'));
     }
 
-    if (this.contract.options.address == null) {
+    if (!this.contract || !this.contract.options || this.contract.options.address == null) {
         if (log) logger.log(colors.red('==> Deploy FAILED! (no contract address)\n'));
     } else {
         if (log) logger.log(colors.green('==> Contract deployed!') + ' to: ' + colors.blue(this.contract.options.address) + '\n');
