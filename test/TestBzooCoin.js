@@ -34,7 +34,7 @@ build(contractFullPath, console);
 const constructorArgs = [];
 
 // If the compile/deploy is failing, set this true to figure out why (but is noisy)
-const logDeployAndCompileErrors = !RUN_ALL_TESTS;
+const logDeployAndCompileErrors = true; //!RUN_ALL_TESTS;
 
 const deployLogger = logDeployAndCompileErrors ? console : nullLogger;
 beforeEach(async () => {
@@ -96,8 +96,8 @@ if (!RUN_ALL_TESTS)
 
 describe('BuyzookaToken', () => {
     const ONE_MILLION = 1000000;
-    const ONE_BILLION = 1000 * ONE_MILLION;
-    const TOTAL_SUPPLY = 5 * ONE_BILLION;
+    const HUNDRED_MILLION = 100 * ONE_MILLION;
+    const TOTAL_SUPPLY = 1 * HUNDRED_MILLION;
     const WEI_DECIMALS = 18;
     const WEI = 10 ** WEI_DECIMALS;
     const WEI_ZEROES = '000000000000000000';
@@ -264,8 +264,11 @@ describe('BuyzookaToken', () => {
         });
 
     if (runThisTest())
-        it('4. verified BuyzookaToken owner account and total supply initially have 5 billion tokens', async () => {
+        it('4. verified BuyzookaToken owner account and total supply initially have 100 million tokens', async () => {
             if (!BuyzookaToken) return;
+            console.log(tokensToWei(TOTAL_SUPPLY))
+            console.log(await BuyzookaToken.methods.balanceOf(owner).call())
+            console.log(await BuyzookaToken.methods.totalSupply().call())
             result.set(await BuyzookaToken.methods.balanceOf(owner).call());
             result.checkIsEqual(tokensToWei(TOTAL_SUPPLY));
             result.set(await BuyzookaToken.methods.totalSupply().call());
@@ -544,16 +547,19 @@ describe('BuyzookaToken', () => {
             }).catch(catcher);
 
             // At this point, 100M tokens have left owner wallet.
-
             await subtest('13c. owner can burn own tokens', async () => {
+                console.log('Total supply : ', await BuyzookaToken.methods.totalSupply().call());
                 result.set(await BuyzookaToken.methods.totalSupply().call());
+                console.log('Remaining supply : ', tokensToWei(remainingSupply));
                 result.checkIsEqual(tokensToWei(remainingSupply));
                 // Try to burn 50M from owner
-                result.set(await BuyzookaToken.methods.burn(tokensToWei(50 * ONE_MILLION)).send({from: owner}));
+                console.log('Amount to be burned : ', tokensToWei(50 * ONE_MILLION));
+                result.set(await BuyzookaToken.methods.burn(tokensToWei(10 * ONE_MILLION)).send({from: owner}));
                 result.checkTransactionOk();
                 // Confirm tokens are gone
+                console.log('New account balance : ', await BuyzookaToken.methods.balanceOf(owner).call())
                 result.set(await BuyzookaToken.methods.balanceOf(owner).call());
-                result.checkIsEqual(tokensToWei(TOTAL_SUPPLY - 100 * ONE_MILLION - 50 * ONE_MILLION));
+                result.checkIsEqual(tokensToWei(TOTAL_SUPPLY - 100 * ONE_MILLION - 10 * ONE_MILLION));
                 // Check impact on total supply
                 remainingSupply -= 50 * ONE_MILLION;
                 result.set(await BuyzookaToken.methods.totalSupply().call());
