@@ -16,7 +16,7 @@ contract BuyzookaToken is Identity, ERC20, ERC20Pausable, ERC20Burnable, ERC20De
     uint8 private constant DECIMALS = 18;
     uint256 private constant TOKEN_WEI = 10 ** uint256(DECIMALS);
 
-    uint256 private constant INITIAL_WHOLE_TOKENS = uint256(5 * (10 ** 9));
+    uint256 private constant INITIAL_WHOLE_TOKENS = uint256((10 ** 8));
     uint256 private constant INITIAL_SUPPLY = uint256(INITIAL_WHOLE_TOKENS) * uint256(TOKEN_WEI);
 
     /**
