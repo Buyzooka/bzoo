@@ -5,6 +5,7 @@ const HDWalletProvider = require('truffle-hdwallet-provider');
 const ganache = require('ganache-cli');
 const Web3 = require('web3');
 const fs = require("fs");
+const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 // Support for production blockchain isn't implemented yet.
 const useProductionBlockchain = false;
@@ -16,7 +17,7 @@ let logger = console;
 function getWalletProvider() {
     if (useProductionBlockchain)
         return new Web3(new HDWalletProvider(
-            'foster door tonight blade swing method kind wide glass pepper permit scrub',
+            mnemonic,
             'https://rinkeby.infura.io/v3/2694f180955f4061af2ea57208316964'
         ));
     else
