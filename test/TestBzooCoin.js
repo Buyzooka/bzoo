@@ -293,12 +293,10 @@ describe('BuyzookaToken', () => {
             }).catch(catcher);
 
             await subtest('6a. account0 is owner, others are not.', async () => {
-                result.set(await BuyzookaToken.methods.isOwner().call());
-                result.checkIsTrue();
-                result.set(await BuyzookaToken.methods.isOwner().call({from: account1}));
-                result.checkIsFalse();
-                result.set(await BuyzookaToken.methods.isOwner().call({from: account2}));
-                result.checkIsFalse();
+                result.set(await BuyzookaToken.methods.owner().call());
+                result.checkIsEqual(owner);
+                result.checkIsNotEqual(account1);
+                result.checkIsNotEqual(account2);
             }).catch(catcher);
         });
 

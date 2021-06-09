@@ -14,6 +14,7 @@ const contractPath_default = './contracts/BuyzookaToken.sol';
 let allSources = '';
 const dependencies = [];
 const files = new Set();
+let spxAdded = false;
 
 // Saving this for later if case we want to use solc 0.5's dependency handling.
 const input = {
@@ -88,7 +89,7 @@ function compileContract(contractPath, contractFile) {
 
     // Compile all the contracts
     if (log) logger.log('Compiling \'' + contractPath + '\' and dependencies...');
-    const compiled = solc.compile(JSON.stringify(input_monolithic), loadImport);
+    const compiled = solc.compile(JSON.stringify(input_monolithic), {});
     const compiledObject = JSON.parse(compiled);
 
     // Save the full compiled outputJSON, pretty-printed
@@ -191,8 +192,16 @@ function readSources(contractFullPath) {
                 const parts = line.split('\"');
                 const importFullPath = parts[1];        // The text between the double quotes
                 addSource(importFullPath, shortenSource(importedSource));
-            } else
+            } else if(line.indexOf("// SPDX-License-Identifier") === -1) {
                 sourceStripped += (line + '\n');
+            } else {
+                if (!spxAdded) {
+                    sourceStripped += (line + '\n');
+                    spxAdded = true;
+                }
+                
+                if (log) logger.log(`Skipped ${line}`);
+            }
         }
     }
 

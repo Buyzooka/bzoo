@@ -1,16 +1,17 @@
-pragma solidity ^0.5.7;
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.4;
 
 import "../../openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "../../openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
-import "../../openzeppelin-solidity/contracts/token/ERC20/ERC20Burnable.sol";
-import "../../openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
+import "../../openzeppelin-solidity/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "../../openzeppelin-solidity/contracts/access/Ownable.sol";
 
 /**
  * @dev An ERC20 implementation of the BuyzookaToken ecosystem token. All tokens are initially pre-assigned to
  * the creator, and can later be distributed freely using transfer transferFrom and other ERC20
  * functions.
  */
-contract BuyzookaToken is ERC20, ERC20Pausable, ERC20Burnable, ERC20Detailed {
+contract BuyzookaToken is ERC20, ERC20Burnable, Ownable {
     uint32 public constant VERSION = 8;
 
     uint8 private constant DECIMALS = 18;
@@ -22,7 +23,7 @@ contract BuyzookaToken is ERC20, ERC20Pausable, ERC20Burnable, ERC20Detailed {
     /**
      * @dev Constructor that gives msg.sender all of existing tokens.
      */
-    constructor () ERC20Detailed("BuyzookaToken", "BZOO", DECIMALS) public {
+    constructor() ERC20("BuyzookaToken", "BZOO") {
         // This is the only place where we ever mint tokens.
         _mint(msg.sender, INITIAL_SUPPLY);
     }
