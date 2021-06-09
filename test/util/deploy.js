@@ -57,8 +57,7 @@ async function deployContract(walletProvider, contractFullPath, doBuild, constru
             .deploy({data: '0x' + bytecode, arguments: constructorArgs})
             .send({
                 from: this.accounts[0], 
-                gas: '6720000',
-                // gas: '6720000',
+                gas: '6720000'
             });        /* This is AT the block limit and CANNOT be increased! */
     } catch (err) {
         if (log) logger.log(colors.red('==> Deploy FAILED! (no deployment)\n'));
@@ -80,7 +79,6 @@ async function deploy(contractFullPath, doBuild, constructorArgs, theLogger) {
     const deployment = await deployContract(getWalletProvider(), contractFullPath, doBuild, constructorArgs, theLogger).catch(logger.log);
     if (log) logger.log('Done!');
 
-    logger.log('Deployment: '+deployment);
     return deployment;
 }
 
