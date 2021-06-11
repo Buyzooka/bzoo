@@ -74,8 +74,11 @@ The testing style is end-to-end functional testing. While these tests run pretty
 ## Deployment
 
 You can deploy the contract on Polygon testnet **Mumbai** by running :
+
 `truffle migrate --network mumbai`
+
 Or on Polygon mainnet via following command : 
+
 `truffle migrate --network matic` or `truffle migrate --network polygon`
 
 ## Built With
